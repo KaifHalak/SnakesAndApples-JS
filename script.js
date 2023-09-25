@@ -18,6 +18,11 @@ let direction = "d"
 
 let snakeBody = [snakeHead]
 
+let playAgainButton = document.querySelector(".play-again-container button")
+playAgainButton.addEventListener("click", () => {
+    window.location.reload()
+})
+
 // ==== CONSTANTS ====
 
 const GAME_SPEED = 70 // snake movement in ms
@@ -54,6 +59,7 @@ document.documentElement.addEventListener("keypress",(key) => {
     }
 })
 
+
 // Each snake movement will correspond to its width
 let frames = setInterval(() => {
     CheckFood()
@@ -82,7 +88,7 @@ let frames = setInterval(() => {
 
     if (CheckForCollision() || CheckIfOutsideBoard()){
         clearInterval(frames)
-        // GameOver()
+        GameOver()
         return
     }
 
@@ -95,11 +101,10 @@ function GameOver(){
     if (currentScore > bestScore){
         localStorage.setItem("best-score",currentScore)
         bestScoreText.textContent = currentScore
-    }
+    }   
 
-    setTimeout( () => {
-        window.location.reload()
-    }, 3000)
+    let playAgainContainer = document.querySelector(".play-again-container")
+    playAgainContainer.classList.remove("hide")
 
 }
 
