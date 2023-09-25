@@ -6,7 +6,7 @@
     padding: 0px;
 
     /* BOARD */
-    --board-size: 580px;
+    --board-size: 520px;
     --board-border: 5px;
     --board-width: calc(var(--board-size) + var(--board-border) * 2);
     --board-height: calc(var(--board-size) + var(--board-border) * 2);
