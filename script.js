@@ -33,18 +33,22 @@ const BOARD_HEIGHT = GetValue(boardValues.height) - GetValue(boardValues.borderL
 document.documentElement.addEventListener("keypress",(key) => {
     switch (key.key) {
         case "w":
+            if (direction === "s"){return}
             direction = "w"
             break;
     
         case "a":
+            if (direction === "d"){return}
             direction = "a"
             break;
 
         case "s":
+            if (direction === "w"){return}
             direction = "s"
             break
 
         case "d":
+            if (direction === "a"){return}
             direction = "d"
             break
     }
