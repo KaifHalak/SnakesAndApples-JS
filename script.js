@@ -1,31 +1,35 @@
-let head = document.querySelector(".snake-head")
-let head_values = window.getComputedStyle(head)
+// ==== VARIABLES ====
+
+let snakeHead = document.querySelector(".snake-head")
+let snakeHeadValues = window.getComputedStyle(snakeHead)
+
+let board = document.querySelector(".board")
+let boardValues = window.getComputedStyle(board)
 
 let apple = document.querySelector(".apple")
 
 let score = document.querySelector(".current-score .score")
 
-const INTERVAL = 50
-const SNAKE_WIDTH = GetValue(head_values.width) - 5
-
-
-const board = document.querySelector(".board")
-const board_values = window.getComputedStyle(board)
-const BOARD_WIDTH = GetValue(board_values.width) - GetValue(board_values.borderLeftWidth) * 2
-const BOARD_HEIGHT = GetValue(board_values.height) - GetValue(board_values.borderLeftWidth) * 2
-
-let best_score = Number(localStorage.getItem("best-score")) || 0
-let best_score_text = document.querySelector(".best-score .score")
-best_score_text.textContent = best_score
-
-// Since u r starting after the border and border is 5px, theoretically, if width is 650px, its actually 640px
-// The size of the board (exluding the border thickness) should be a multiple of the width of the head
+let bestScore = Number(localStorage.getItem("best-score")) || 0
+let bestScoreText = document.querySelector(".best-score .score")
+bestScoreText.textContent = bestScore
 
 let direction = "d"
 
-let snake_body = [head]
+let snakeBody = [snakeHead]
+
+// ==== CONSTANTS ====
+
+const GAME_SPEED = 70 // snake movement in ms
+
+const SNAKE_WIDTH = GetValue(snakeHeadValues.width)
+
+// Get the width and height excluding the borders
+const BOARD_WIDTH = GetValue(boardValues.width) - GetValue(boardValues.borderLeftWidth) * 2
+const BOARD_HEIGHT = GetValue(boardValues.height) - GetValue(boardValues.borderLeftWidth) * 2
 
 
+// Detect key presses
 document.documentElement.addEventListener("keypress",(key) => {
     switch (key.key) {
         case "w":
@@ -46,44 +50,47 @@ document.documentElement.addEventListener("keypress",(key) => {
     }
 })
 
-
+// Each snake movement will correspond to its width
 let frames = setInterval(() => {
-    Food()
+    CheckFood()
     UpdateBodyPos()
+
     switch (direction) {
         case "w":
-            head.style.top = `${GetValue(head_values.top) - SNAKE_WIDTH}px `
+            snakeHead.style.top = `${GetValue(snakeHeadValues.top) - SNAKE_WIDTH}px `
             break;
     
         case "a":
-            head.style.left = `${GetValue(head_values.left) - SNAKE_WIDTH}px `
+            snakeHead.style.left = `${GetValue(snakeHeadValues.left) - SNAKE_WIDTH}px `
             break;
 
         case "s":
-            head.style.top = `${GetValue(head_values.top) + SNAKE_WIDTH}px `
+            snakeHead.style.top = `${GetValue(snakeHeadValues.top) + SNAKE_WIDTH}px `
             break
 
         case "d":
-            head.style.left = `${GetValue(head_values.left) + SNAKE_WIDTH}px `
+            snakeHead.style.left = `${GetValue(snakeHeadValues.left) + SNAKE_WIDTH}px `
             break
+
     }
 
-    Food()
-    if (CheckForCollision() || isOverflown()){
+    CheckFood()
+
+    if (CheckForCollision() || CheckIfOutsideBoard()){
         clearInterval(frames)
-        GameOver()
+        // GameOver()
         return
     }
 
-},INTERVAL)
+},GAME_SPEED)
 
 
 
 function GameOver(){
-    let current_score = Number(score.textContent)
-    if (current_score > best_score){
-        localStorage.setItem("best-score",current_score)
-        best_score_text.textContent = current_score
+    let currentScore = Number(score.textContent)
+    if (currentScore > bestScore){
+        localStorage.setItem("best-score",currentScore)
+        bestScoreText.textContent = currentScore
     }
 
     setTimeout( () => {
@@ -92,7 +99,9 @@ function GameOver(){
 
 }
 
+
 function GetValue(pixels){
+    // Ex 15px will return 15
     return Number(pixels.split("p")[0])
 }
 
@@ -104,23 +113,20 @@ function IncreaseSize(){
     body.classList.add("snake-style")
 
 
+    let lastBody = snakeBody[snakeBody.length - 1]
+    body.style.top = lastBody.style.top
+    body.style.left = lastBody.style.left
 
-
-    let last_body = snake_body[snake_body.length - 1]
-    
-    body.style.top = last_body.style.top
-    body.style.left = last_body.style.left
-
-    snake_body.push(body)
+    snakeBody.push(body)
 
     document.querySelector(".board").appendChild(body)
 
 }
 
 function UpdateBodyPos(){
-    for (let i = snake_body.length - 1; i > 0; i--){
-        let back = snake_body[i]
-        let front = snake_body[i - 1]
+    for (let i = snakeBody.length - 1; i > 0; i--){
+        let back = snakeBody[i]
+        let front = snakeBody[i - 1]
 
         back.style.top = front.style.top
         back.style.left = front.style.left
@@ -131,9 +137,9 @@ function UpdateBodyPos(){
 
 function CheckForCollision(){
     let body
-    for (let i = 1; i < snake_body.length; i++){
-        body = snake_body[i]
-        if (body.style.top === head.style.top && body.style.left === head.style.left){
+    for (let i = 1; i < snakeBody.length; i++){
+        body = snakeBody[i]
+        if (body.style.top === snakeHead.style.top && body.style.left === snakeHead.style.left){
             return true
         }
     }
@@ -142,28 +148,27 @@ function CheckForCollision(){
 }
 
 
-function isOverflown() {
-    
+function CheckIfOutsideBoard() {
     return (
-        GetValue(head_values.left) < 0 ||
-        GetValue(head_values.top) < 0 ||
-        GetValue(head_values.left) > BOARD_WIDTH - SNAKE_WIDTH ||
-        GetValue(head_values.top) > BOARD_HEIGHT - SNAKE_WIDTH
+        GetValue(snakeHeadValues.left) < 0 ||
+        GetValue(snakeHeadValues.top) < 0 ||
+        GetValue(snakeHeadValues.left) > BOARD_WIDTH - SNAKE_WIDTH ||
+        GetValue(snakeHeadValues.top) > BOARD_HEIGHT - SNAKE_WIDTH
     )
   }
 
-function Food(){
-    if (head.style.top === apple.style.top && head.style.left === apple.style.left){
+function CheckFood(){
+    if (snakeHead.style.top === apple.style.top && snakeHead.style.left === apple.style.left){
         IncreaseSize()
 
-
-        let top = `${getRandomNumber(max= (BOARD_HEIGHT / SNAKE_WIDTH) - 2) * SNAKE_WIDTH}px`
-        let left = `${getRandomNumber(max= (BOARD_HEIGHT / SNAKE_WIDTH) - 2) * SNAKE_WIDTH}px`
-        let flag = CheckIfPosSameAsSnake(top,left)
+        // Get a new position for the apple which is not occupied by the snake 
+        let top = `${GetRandomNumber() * SNAKE_WIDTH}px`
+        let left = `${GetRandomNumber() * SNAKE_WIDTH}px`
+        let flag = CheckIfSamePositionAsSnake(top,left)
         while (flag){
-            top = `${getRandomNumber(max= (BOARD_HEIGHT / SNAKE_WIDTH) - 2) * SNAKE_WIDTH}px`
-            left = `${getRandomNumber(max= (BOARD_HEIGHT / SNAKE_WIDTH) - 2) * SNAKE_WIDTH}px`
-            flag = CheckIfPosSameAsSnake(top,left)
+            top = `${GetRandomNumber() * SNAKE_WIDTH}px`
+            left = `${GetRandomNumber() * SNAKE_WIDTH}px`
+            flag = CheckIfSamePositionAsSnake(top,left)
         }
 
         apple.style.top = top
@@ -172,17 +177,20 @@ function Food(){
     }
 }
 
-function CheckIfPosSameAsSnake(top,left){
-    for (let i = 1; i < snake_body.length - 1; i++){
-        let body_block = snake_body[i]
-        if (body_block.style.top === top && body_block.style.left === left){
+function CheckIfSamePositionAsSnake(top,left){
+    for (let i = 1; i < snakeBody.length - 1; i++){
+        let bodyBlock = snakeBody[i]
+        if (bodyBlock.style.top === top && bodyBlock.style.left === left){
             return true
         }
     }
     return false
 }
 
-function getRandomNumber(max) {
+function GetRandomNumber() {
+    // Return number between min and max
+    const ERROR = 2
+    let max = ((BOARD_HEIGHT / SNAKE_WIDTH) - ERROR)
     let min = 1
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }

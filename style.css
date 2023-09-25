@@ -1,9 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 
+*{
+    box-sizing: border-box;
+    margin:0px;
+    padding: 0px;
+
+    /* BOARD */
+    --board-size: 500px;
+    --board-border: 5px;
+    --board-width: calc(var(--board-size) + var(--board-border) * 2);
+    --board-height: calc(var(--board-size) + var(--board-border) * 2);
+
+    /* SNAKE */
+    --snake-width: 20px;
+    --snake-height: 20px;
+}
+
 html{
     background-color: antiquewhite;
-    width: -webkit-fill-available;
-    height: -webkit-fill-available;
+
+    width: 100%;
+    height: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -13,9 +31,8 @@ html{
 
 .snake-style{
     position: absolute;
-    width: 20px;
-    height: 20px;
-    box-sizing: border-box;
+    width: var(--snake-width);
+    height: var(--snake-height);
     border: 1px black solid;
     border-radius: 15px;
 }
@@ -24,12 +41,10 @@ html{
     top: 0px;
     left: 0px;
     background-color: green;
-    margin: 0px;
 }
 
 .snake-body{
     background-color: aqua;
-    margin: 0px;
 }
 
 
@@ -37,16 +52,17 @@ html{
     top: 200px;
     left: 200px;
     background-color: red;
+
 }
 
 
 .board{
-    box-sizing: border-box;
-    border: 5px solid black;
+    border: var(--board-border) solid black;
     position: relative;
     overflow: hidden;
-    width: 510px;
-    height: 510px;
+
+    width: var(--board-width);
+    height: var(--board-height);
 }
 
 /* Score */
