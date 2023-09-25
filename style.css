@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+
+html{
+    background-color: antiquewhite;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.snake-style{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    border: 1px black solid;
+    border-radius: 15px;
+}
+
+.snake-head{
+    top: 0px;
+    left: 0px;
+    background-color: green;
+    margin: 0px;
+}
+
+.snake-body{
+    background-color: aqua;
+    margin: 0px;
+}
+
+
+.apple{
+    top: 200px;
+    left: 200px;
+    background-color: red;
+}
+
+
+.board{
+    box-sizing: border-box;
+    border: 5px solid black;
+    position: relative;
+    overflow: hidden;
+    width: 510px;
+    height: 510px;
+}
+
+/* Score */
+
+.score-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.current-score{
+    font-size: 40px;
+}

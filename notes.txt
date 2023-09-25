@@ -1,0 +1,1 @@
+if u clear interval, the remaining lines of code will exe b4 exiting
