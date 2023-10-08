@@ -1,0 +1,13 @@
+{
+  "name": "snake-and-apple",
+  "version": "1.0.0",
+  "description": "Eat apple a day, keeps the doctor away 🍎",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts": "tsc updatedScript.ts -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
